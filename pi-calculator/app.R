@@ -21,12 +21,12 @@ circle_fn <- function(center = c(0,0), radius = 1, n_points = 100){
 ui <- dashboardPage(
 
     # Application title
-    dashboardHeader(title = "Calculating Pi by Simulation"),
+    dashboardHeader(title = "Calculating Pi by Throwing Darts"),
 
     # Sidebar with a slider input for number of bins 
     dashboardSidebar(
             sliderInput("nPoints", 
-                        label = "The number of points to use",
+                        label = "number of darts to throw",
                         value = 1000,
                         min = 100,
                         max = 10000, 
@@ -40,9 +40,12 @@ ui <- dashboardPage(
                    box(status = "primary", plotOutput("circlePlot", width = '100%'),
                        width = 12)),
             column(width = 4, 
-                   box("This app will calculate the value of Pi based on
-                       the number of random points which fall inside
-                       of a circle within a square of the same diameter.",
+                   box(HTML("Imagine throwing darts at a circular dartboard inside of
+                       a square the same diameter. If you throw enough darts, you
+                       will be able to estimate the value of pi, which is the 
+                       ratio of a circle's circumference to its diameter. <br/><br/>
+                       Choose how many darts you'd like to throw, and we can
+                       take a guess at calculating pi."),
                        width = 12),
                    box(status = "primary", htmlOutput("calcOutput"),
                        width = 12))
@@ -103,13 +106,14 @@ server <- function(input, output) {
             pull(n)
         percentage_points <- 
             n_points_inside / input$nPoints
-        pi_est <- 4 * percentage_points
+        pi_est <- round(4 * percentage_points, 5)
         
-        str1 <- paste("There are", n_points_inside, "points inside the circle.")
-        str2 <- paste("There are", input$nPoints, "points in the square.")
+        
+        str1 <- paste("We threw", input$nPoints, "darts at the board.")
+        str2 <- paste(n_points_inside, "darts landed inside the circle.")
         str3 <- paste("Approximately", percentage_points,
-                      "percent of the points are inside the circle.")
-        str4 <- paste("This means the estimate of PI is approximately",
+                      "percent of the darts are inside the circle.")
+        str4 <- paste("This means our estimate of PI is approximately",
                       strong(pi_est))
         
         HTML(paste(str1, str2, str3, str4, sep = "<br/><br/>"))
