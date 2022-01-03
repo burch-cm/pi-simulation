@@ -105,7 +105,7 @@ server <- function(input, output) {
             count() |> 
             pull(n)
         percentage_points <- 
-            n_points_inside / input$nPoints
+            round(n_points_inside / input$nPoints, 5)
         pi_est <- round(4 * percentage_points, 5)
         
         
